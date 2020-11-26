@@ -1,0 +1,20 @@
+* {
+    box-sizing: border-box;
+}
+
+.calculator {
+    display: flex;
+    flex-direction: column;
+}
+
+.calculator__row, .calculator__left, .calculator__right {
+    display: flex;
+    flex-direction: row;
+}
+
+.calculator__cell {
+    border: 1px solid #ddd;
+    height: 2rem;
+    padding: .5rem;
+    width: 2rem;
+}
