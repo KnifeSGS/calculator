@@ -37,7 +37,7 @@ body {
     flex-direction: row;
 }
 
-.calculator__cell, .calculator__sumBtn {
+.calculator__cell, .calculator__resultBtn {
     display: flex;
     justify-content: center;
     align-content: center;
@@ -50,20 +50,24 @@ body {
     border-collapse: collapse;
 }
 
-.calculator__sumBtn {
+.calculator__resultBtn {
     height: 12rem;
 }
 
-.btn, .sumBtn {
+.btn, .resultBtn {
     margin: .3rem;
     width: 5rem;
 }
 
-.btn:focus, .sumBtn:focus {
+.btn:hover, .resultBtn:hover {
+    cursor: pointer;
+}
+
+.btn:focus, .resultBtn:focus {
     outline: none;
 }
 
-.btn:active, .sumBtn:active {
+.btn:active, .resultBtn:active {
     border: inset;
 }
 
@@ -76,7 +80,7 @@ body {
     background-color: rgb(221,221,221);
 }
 
-.sumBtn {
+.resultBtn {
     background-color: rgb(77,143,253);
     color:  rgb(249,249,249);
     border: 1px outset rgb(45, 106, 211);
