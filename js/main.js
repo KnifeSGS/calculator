@@ -1,6 +1,6 @@
 'use strict';
 
-const buttons = document.querySelectorAll('button');
+const buttons = document.querySelectorAll('.btn');
 const monitor = document.querySelector('.calculator__monitor');
 const display = document.querySelector('.calculator__display');
 const resultButton = document.querySelector('.resultBtn')
@@ -10,12 +10,18 @@ const addEvent = () => {
         button.addEventListener('click', getButtonPress)
     })
 };
+const addEventResult = () => {
+        resultButton.addEventListener('click', calculateResult)
+};
 
 const getButtonPress = () => {
     const clickedButtonValue = event.target.value;
+    clickedButtonValue === 'C' ? (monitor.textContent = '', display.textContent = '') : monitor.textContent += clickedButtonValue;  
+};
 
-    clickedButtonValue === '=' ? ((monitor.textContent === '') ? 'return' : monitor.textContent = count(monitor.textContent)) :
-    clickedButtonValue === 'C' ? monitor.textContent = '' : monitor.textContent += clickedButtonValue;  
+const calculateResult = () => {
+    const resultButtonValue = event.target.value;
+    resultButtonValue === '=' ? ((monitor.textContent === '') ? 'return' : monitor.textContent = count(monitor.textContent)) : 'return';
 }
 
 const count = () => {
@@ -53,28 +59,16 @@ const calcArr = () => {
         .reduce((r, a) => (a.forEach((a, i) => (r[i] = r[i] || []).push(a)), r), [])
         .reduce((a, b) => a.concat(b))
         .join('');
-        //  .reduce((a, b) => a.forEach((c, i) => b[i] === '+' ? c[i] + c[i + 1] : 
-            // b[i] === '-' ? c[i] - c[i + 1] : b[i] === '*' ? c[i] * c[i + 1] :
-            // b[i] === '/' ? c[i] / c[i + 1] : console.log(a, b, c)));
-        // for (let i = 0; i < ops.length; i += 1) {
-            // for (let j = 0; j < ops.length; j += 1) {
-                // ops[j] === '+' ? numbers[i] + numbers[i+1] : ops[j] === '-' ? numbers[i] - numbers[i+1] : 
-                // ops[j] === '*' ? numbers[i] * numbers[i+1] : ops[j] === '/' ? numbers[i] / numbers[i+1] : 
-                // console.log(numbers, ops)
-            // }
-        // }
 
-        // console.log(result);
-    
     return result
 }
 
 
 
-function parseCalculationString(s) {
+const parseCalculationString = (s) => {
     let calculation = [];
     let current = '';
-    for (let i = 0, ch; ch = s.charAt(i); i++) {
+    for (let i = 0, ch; ch = s.charAt(i); i += 1) {
         if ('*/+-'.indexOf(ch) > -1) {
             if (current == '' && ch == '-') {
                 current = '-';
@@ -92,13 +86,13 @@ function parseCalculationString(s) {
     return calculation;
 }
 
-function calculate(calc) {
+const calculate = (calc) => {
     let operators = [{'*': (a, b) => a * b, '/': (a, b) => a / b},
                {'+': (a, b) => a + b, '-': (a, b) => a - b}],
         newCalc = [],
         currentOp;
-    for (let i = 0; i < operators.length; i++) {
-        for (let j = 0; j < calc.length; j++) {
+    for (let i = 0; i < operators.length; i += 1) {
+        for (let j = 0; j < calc.length; j += 1) {
             if (operators[i][calc[j]]) {
                 currentOp = operators[i][calc[j]];
             } else if (currentOp) {
@@ -108,13 +102,11 @@ function calculate(calc) {
             } else {
                 newCalc.push(calc[j]);
             }
-            console.log(newCalc);
         }
         calc = newCalc;
         newCalc = [];
     }
     if (calc.length > 1) {
-        console.log('Error!');
         return calc;
     } else {
         return calc[0];
@@ -124,11 +116,10 @@ function calculate(calc) {
 
 const printer = () => {
     const lastChar = result.charAt(result.length-1);
-    isNaN(lastChar) === true ? display.value = `Túl sok '${lastChar}' jel` : display.value = calculate(parseCalculationString(result));
-    // console.log(result);
-    // console.log(lastChar);
+    isNaN(lastChar) === true ? display.textContent = `Túl sok '${lastChar}' jel` : display.textContent = calculate(parseCalculationString(result));
 };
 
 
 
 addEvent();
+addEventResult();
