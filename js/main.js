@@ -53,18 +53,80 @@ const calcArr = () => {
         .reduce((r, a) => (a.forEach((a, i) => (r[i] = r[i] || []).push(a)), r), [])
         .reduce((a, b) => a.concat(b))
         .join('');
+        //  .reduce((a, b) => a.forEach((c, i) => b[i] === '+' ? c[i] + c[i + 1] : 
+            // b[i] === '-' ? c[i] - c[i + 1] : b[i] === '*' ? c[i] * c[i + 1] :
+            // b[i] === '/' ? c[i] / c[i + 1] : console.log(a, b, c)));
+        // for (let i = 0; i < ops.length; i += 1) {
+            // for (let j = 0; j < ops.length; j += 1) {
+                // ops[j] === '+' ? numbers[i] + numbers[i+1] : ops[j] === '-' ? numbers[i] - numbers[i+1] : 
+                // ops[j] === '*' ? numbers[i] * numbers[i+1] : ops[j] === '/' ? numbers[i] / numbers[i+1] : 
+                // console.log(numbers, ops)
+            // }
+        // }
 
+        // console.log(result);
     
     return result
 }
 
 
 
+function parseCalculationString(s) {
+    let calculation = [];
+    let current = '';
+    for (let i = 0, ch; ch = s.charAt(i); i++) {
+        if ('*/+-'.indexOf(ch) > -1) {
+            if (current == '' && ch == '-') {
+                current = '-';
+            } else {
+                calculation.push(parseFloat(current), ch);
+                current = '';
+            }
+        } else {
+            current += s.charAt(i);
+        }
+    }
+    if (current != '') {
+        calculation.push(parseFloat(current));
+    }
+    return calculation;
+}
+
+function calculate(calc) {
+    let operators = [{'*': (a, b) => a * b, '/': (a, b) => a / b},
+               {'+': (a, b) => a + b, '-': (a, b) => a - b}],
+        newCalc = [],
+        currentOp;
+    for (let i = 0; i < operators.length; i++) {
+        for (let j = 0; j < calc.length; j++) {
+            if (operators[i][calc[j]]) {
+                currentOp = operators[i][calc[j]];
+            } else if (currentOp) {
+                newCalc[newCalc.length - 1] = 
+                    currentOp(newCalc[newCalc.length - 1], calc[j]);
+                currentOp = null;
+            } else {
+                newCalc.push(calc[j]);
+            }
+            console.log(newCalc);
+        }
+        calc = newCalc;
+        newCalc = [];
+    }
+    if (calc.length > 1) {
+        console.log('Error!');
+        return calc;
+    } else {
+        return calc[0];
+    }
+}
+
+
 const printer = () => {
     const lastChar = result.charAt(result.length-1);
-    isNaN(lastChar) === true ? display.value = `Túl sok '${lastChar}' jel` : display.value = result;
-    console.log(result);
-    console.log(lastChar);
+    isNaN(lastChar) === true ? display.value = `Túl sok '${lastChar}' jel` : display.value = calculate(parseCalculationString(result));
+    // console.log(result);
+    // console.log(lastChar);
 };
 
 
