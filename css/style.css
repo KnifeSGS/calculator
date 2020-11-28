@@ -11,13 +11,13 @@ body {
     height: 100vh;
 }
 
-.calculator__monitor {
+.calculator__monitor, .calculator__display {
     width: 19.4rem;
     height: 3rem;
     border: 1px inset rgb(221,221,221);
     margin: .3rem;
     text-align: right;
-    overflow: hidden;
+    overflow: hidden;;
     font-size: 2.5rem;
 }
 
