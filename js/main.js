@@ -52,74 +52,48 @@ const numberizer = () => {
     return numbers;
 };
 
-let result = [];
+let displayedCalc = [];
 
 const calcArr = () => {
-    result = [numbers, ops]
+    displayedCalc = [numbers, ops]
         .reduce((r, a) => (a.forEach((a, i) => (r[i] = r[i] || []).push(a)), r), [])
-        .reduce((a, b) => a.concat(b))
-        .join('');
-
-    return result
+        .reduce((a, b) => a.concat(b));
+    return displayedCalc
 }
 
-
-
-const parseCalculationString = (s) => {
-    let calculation = [];
-    let current = '';
-    for (let i = 0, ch; ch = s.charAt(i); i += 1) {
-        if ('*/+-'.indexOf(ch) > -1) {
-            if (current == '' && ch == '-') {
-                current = '-';
-            } else {
-                calculation.push(parseFloat(current), ch);
-                current = '';
-            }
-        } else {
-            current += s.charAt(i);
-        }
-    }
-    if (current != '') {
-        calculation.push(parseFloat(current));
-    }
-    return calculation;
-}
-
-const calculate = (calc) => {
-    let operators = [{'*': (a, b) => a * b, '/': (a, b) => a / b},
-               {'+': (a, b) => a + b, '-': (a, b) => a - b}],
-        newCalc = [],
-        currentOp;
+const calculate = (inputArr) => {
+    let operators = [{'*': (a, b) => a * b,
+                      '/': (a, b) => a / b},
+                     {'+': (a, b) => a + b, 
+                      '-': (a, b) => a - b}];
+    let newCalc = [];
+    let currentOp;
     for (let i = 0; i < operators.length; i += 1) {
-        for (let j = 0; j < calc.length; j += 1) {
-            if (operators[i][calc[j]]) {
-                currentOp = operators[i][calc[j]];
+        for (let j = 0; j < inputArr.length; j += 1) {
+            if (operators[i][inputArr[j]]) {
+                currentOp = operators[i][inputArr[j]];
             } else if (currentOp) {
                 newCalc[newCalc.length - 1] = 
-                    currentOp(newCalc[newCalc.length - 1], calc[j]);
+                    currentOp(newCalc[newCalc.length - 1], inputArr[j]);
                 currentOp = null;
             } else {
-                newCalc.push(calc[j]);
+                newCalc.push(inputArr[j]);
             }
         }
-        calc = newCalc;
+        inputArr = newCalc;
         newCalc = [];
     }
-    if (calc.length > 1) {
-        return calc;
+    if (inputArr.length > 1) {
+        return inputArr;
     } else {
-        return calc[0];
+        return inputArr[0];
     }
 }
 
-
 const printer = () => {
-    const lastChar = result.charAt(result.length-1);
-    isNaN(lastChar) === true ? display.textContent = `Túl sok '${lastChar}' jel` : display.textContent = calculate(parseCalculationString(result));
+    const lastChar = displayedCalc.join('').charAt(displayedCalc.join('').length - 1);
+    isNaN(lastChar) === true ? display.textContent = `Túl sok '${lastChar}' jel` : display.textContent = calculate(displayedCalc);
 };
-
-
 
 addEvent();
 addEventResult();
